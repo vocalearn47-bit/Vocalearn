@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#6366F1">
+    <meta name="description" content="قدّم طلبك للعمل كأستاذ في منصة VocaLearn - منصة تعليمية حديثة.">
+    <title>طلب عمل كأستاذ - VocaLearn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366F1',
+                        accent: '#C7D2FE',
+                        dark: '#111827',
+                        success: '#10B981',
+                        danger: '#EF4444',
+                        warning: '#F59E0B',
+                    },
+                    fontFamily: {
+                        sans: ['Tajawal', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Tajawal', sans-serif; overflow-x: hidden; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .dark .glass {
+            background: rgba(17, 24, 39, 0.72);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+        }
+        .dark .glass-card {
+            background: rgba(31, 41, 55, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+        }
+
+        .input-glass {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        .dark .input-glass {
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .fade-up-d1 { animation-delay: 0.08s; opacity: 0; }
+        .fade-up-d2 { animation-delay: 0.16s; opacity: 0; }
+        .fade-up-d3 { animation-delay: 0.24s; opacity: 0; }
+        .fade-up-d4 { animation-delay: 0.32s; opacity: 0; }
+
+        .toast-container {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            right: 1rem;
+            z-index: 100;
+            pointer-events: none;
+        }
+        .toast {
+            pointer-events: auto;
+            transform: translateY(-120%);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .input-focus:focus {
+            border-color: #6366F1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        .section-badge {
+            background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(199,210,254,0.2) 100%);
+        }
+
+        .touch-target { min-height: 44px; min-width: 44px; }
+
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 0; height: 0;
+            background: rgba(255,255,255,0.25);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+        .ripple:active::after {
+            width: 300px; height: 300px;
+        }
+
+        .upload-zone {
+            border: 2px dashed rgba(99, 102, 241, 0.3);
+            transition: all 0.3s ease;
+        }
+        .upload-zone:hover, .upload-zone.dragover {
+            border-color: #6366F1;
+            background: rgba(99, 102, 241, 0.05);
+        }
+    </style>
+<base target="_blank">
+</head>
+<body class="bg-gray-50 dark:bg-dark text-gray-900 dark:text-white transition-colors duration-300 antialiased min-h-screen">
+
+    <!-- Top Navbar -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass border-b-0">
+        <div class="max-w-lg mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="home.html" class="touch-target w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </a>
+                <div>
+                    <h1 class="font-extrabold text-sm leading-tight tracking-tight">VocaLearn</h1>
+                    <p class="text-[10px] text-gray-500 dark:text-gray-400 font-medium">طلب عمل كأستاذ</p>
+                </div>
+            </div>
+            <button onclick="toggleTheme()" class="touch-target w-10 h-10 rounded-xl bg-gray-100/80 dark:bg-gray-800/80 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                <svg id="icon-sun" class="w-4 h-4 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+                </svg>
+                <svg id="icon-moon" class="w-4 h-4 block dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-20 pb-32 px-4 max-w-lg mx-auto">
+
+        <!-- Page Header -->
+        <div class="text-center mb-8 fade-up">
+            <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-black leading-tight mb-2">انضم إلى فريق VocaLearn</h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed max-w-xs mx-auto">
+                قدّم طلبك للعمل كأستاذ في منصتنا. نراجع جميع الطلبات بعناية ونرد عليك عبر البريد الإلكتروني.
+            </p>
+        </div>
+
+        <!-- Form -->
+        <form id="job-form" onsubmit="submitApplication(event)" class="space-y-6">
+
+            <!-- Section 1: Personal Info -->
+            <div class="fade-up fade-up-d1">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-8 h-8 rounded-lg section-badge flex items-center justify-center">
+                        <svg class="w-4 h-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+                    <h2 class="font-bold text-sm">المعلومات الشخصية</h2>
+                </div>
+                <div class="glass-card rounded-2xl p-4 space-y-3">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">الاسم *</label>
+                            <input type="text" name="first_name" required placeholder="محمد" 
+                                class="w-full h-12 px-3 rounded-xl input-glass border-0 text-sm input-focus focus:outline-none transition-all placeholder:text-gray-400">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">اللقب *</label>
+                            <input type="text" name="last_name" required placeholder="عبدالله" 
+                                class="w-full h-12 px-3 rounded-xl input-glass border-0 text-sm input-focus focus:outline-none transition-all placeholder:text-gray-400">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">البريد الإلكتروني *</label>
+                        <input type="email" name="email" required placeholder="example@email.com" 
+                            class="w-full h-12 px-3 rounded-xl input-glass border-0 text-sm input-focus focus:outline-none transition-all placeholder:text-gray-400">
+                        <p class="text-[10px] text-gray-400 mt-1.5 flex items-center gap-1">
+                            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                            سيتم الرد عليك عبر بريدك الإلكتروني
+                        </p>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">رقم الهاتف *</label>
+                        <input type="tel" name="phone" required pattern="[0-9+]{8,}" placeholder="0655603829" 
+                            class="w-full h-12 px-3 rounded-xl input-glass border-0 text-sm input-focus focus:outline-none transition-all placeholder:text-gray-400">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Qualifications -->
+            <div class="fade-up fade-up-d2">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-8 h-8 rounded-lg section-badge flex items-center justify-center">
+                        <svg class="w-4 h-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    </div>
+                    <h2 class="font-bold text-sm">المؤهلات والخبرة</h2>
+                </div>
+                <div class="glass-card rounded-2xl p-4 space-y-3">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">التخصص *</label>
+                        <input type="text" name="specialization" required placeholder="مثال: اللغة الإنجليزية، البرمجة، الرياضيات..." 
+                            class="w-full h-12 px-3 rounded-xl input-glass border-0 text-sm input-focus focus:outline-none transition-all placeholder:text-gray-400">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">الخبرة *</label>
+                        <select name="experience" required 
+                            class="w-full h-12 px-3 rounded-xl input-glass border-0 text-sm input-focus focus:outline-none transition-all bg-transparent">
+                            <option value="">اختر مستوى الخبرة...</option>
+                            <option value="less_than_1">أقل من سنة</option>
+                            <option value="1_to_3">1 - 3 سنوات</option>
+                            <option value="3_to_5">3 - 5 سنوات</option>
+                            <option value="5_to_10">5 - 10 سنوات</option>
+                            <option value="more_than_10">أكثر من 10 سنوات</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">طريقة التدريس *</label>
+                        <select name="teaching_method" required 
+                            class="w-full h-12 px-3 rounded-xl input-glass border-0 text-sm input-focus focus:outline-none transition-all bg-transparent">
+                            <option value="">اختر طريقة التدريس...</option>
+                            <option value="online">أونلاين (عبر Zoom/Teams)</option>
+                            <option value="in_person">حضوري</option>
+                            <option value="hybrid">هجين (أونلاين + حضوري)</option>
+                            <option value="recorded">دروس مسجلة</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">تفاصيل إضافية أو أسئلة</label>
+                        <textarea name="additional_notes" rows="3" placeholder="اكتب أي معلومات إضافية تريد مشاركتها..." 
+                            class="w-full px-3 py-3 rounded-xl input-glass border-0 text-sm input-focus focus:outline-none transition-all resize-none placeholder:text-gray-400"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Course Details -->
+            <div class="fade-up fade-up-d3">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-8 h-8 rounded-lg section-badge flex items-center justify-center">
+                        <svg class="w-4 h-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    </div>
+                    <h2 class="font-bold text-sm">تفاصيل الدورة المقترحة</h2>
+                </div>
+                <div class="glass-card rounded-2xl p-4 space-y-3">
+                    <div>
+    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">الدورة المراد تقديمها *</label>
+    <select id="course_select" name="course_id" required onchange="handleCourseSelection(this.value)"
+        class="w-full h-12 px-3 rounded-xl input-glass border-0 text-sm input-focus focus:outline-none transition-all bg-transparent">
+        <option value="">جاري تحميل الدورات...</option>
+    </select>
+    <input type="text" id="custom_course_input" name="custom_course" placeholder="اكتب اسم الدورة الجديدة..." 
+        class="hidden w-full h-12 px-3 mt-2 rounded-xl input-glass border-0 text-sm input-focus focus:outline-none transition-all placeholder:text-gray-400">
+</div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">السعر (دج) *</label>
+                            <input type="number" name="course_price" required min="0" placeholder="5000" 
+                                class="w-full h-12 px-3 rounded-xl input-glass border-0 text-sm input-focus focus:outline-none transition-all placeholder:text-gray-400">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">عدد الحصص *</label>
+                            <input type="number" name="sessions_count" required min="1" placeholder="12" 
+                                class="w-full h-12 px-3 rounded-xl input-glass border-0 text-sm input-focus focus:outline-none transition-all placeholder:text-gray-400">
+                        </div>
+                    </div>
+                      <div>
+                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">مدة كل حصة *</label>
+                        <select id="duration_select" name="session_duration" required onchange="handleDurationSelection(this.value)" 
+                            class="w-full h-12 px-3 rounded-xl input-glass border-0 text-sm input-focus focus:outline-none transition-all bg-transparent">
+                            <option value="">اختر المدة...</option>
+                            <option value="30 دقيقة">30 دقيقة</option>
+                            <option value="45 دقيقة">45 دقيقة</option>
+                            <option value="60 دقيقة">60 دقيقة</option>
+                            <option value="90 دقيقة">90 دقيقة</option>
+                            <option value="120 دقيقة">120 دقيقة</option>
+                            <option value="custom" class="font-bold text-primary">⏱️ مدة مخصصة (كتابة يدوية)</option>
+                        </select>
+                        <input type="text" id="custom_duration_input" name="custom_duration" placeholder="مثال: 75 دقيقة" 
+                            class="hidden w-full h-12 px-3 mt-2 rounded-xl input-glass border-0 text-sm input-focus focus:outline-none transition-all placeholder:text-gray-400">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Profile Image -->
+            <div class="fade-up fade-up-d4">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-8 h-8 rounded-lg section-badge flex items-center justify-center">
+                        <svg class="w-4 h-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+                    <h2 class="font-bold text-sm">الملف الشخصي</h2>
+                </div>
+                <div class="glass-card rounded-2xl p-4 space-y-3">t
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">صورة شخصية (اختيارية)</label>
+                        <div class="upload-zone rounded-xl p-4 text-center cursor-pointer relative" onclick="document.getElementById('profile-input').click()">
+                            <input type="file" id="profile-input" name="profile_image" accept="image/*" class="hidden" onchange="handleImageUpload(this)">
+                            <div id="upload-placeholder">
+                                <svg class="w-8 h-8 text-primary/50 mx-auto mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">انقر لرفع صورة</p>
+                                <p class="text-[10px] text-gray-400 mt-0.5">JPG, PNG - حتى 5 ميجا</p>
+                            </div>
+                            <img id="profile-preview" class="hidden w-24 h-24 rounded-xl object-cover mx-auto border-2 border-primary/20">
+                        </div>
+                        <p class="text-[10px] text-gray-400 mt-1.5">إذا لم ترفع صورة، سيتم تعيين صورة افتراضية جذابة.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="fade-up fade-up-d4 pt-2">
+                <button type="submit" id="submit-btn" class="ripple w-full h-14 rounded-2xl bg-primary text-white font-bold text-sm shadow-xl shadow-primary/30 hover:shadow-primary/50 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    إرسال الطلب
+                </button>
+                <p class="text-center text-[10px] text-gray-400 mt-3">
+                    بالضغط على إرسال، فإنك توافق على مراجعة طلبك من قبل فريق VocaLearn.
+                </p>
+            </div>
+                <div id="success-modal" class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+                  <div id="success-modal-content" class="bg-white dark:bg-gray-900 w-full max-w-sm rounded-3xl p-6 text-center transform scale-95 transition-transform duration-300 shadow-2xl border border-gray-100 dark:border-gray-800">
+                      <div class="w-20 h-20 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <svg class="w-10 h-10 text-success" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M20 6 9 17l-5-5"/>
+                          </svg>
+                      </div>
+                      <h3 class="text-xl font-bold mb-2">تم إرسال طلبك بنجاح!</h3>
+                      <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">
+                          سيتم مراجعة طلبك والتواصل معك قريباً عبر البريد الإلكتروني الذي أدخلته. شكراً لاهتمامك بالانضمام إلينا.
+                      </p>
+                      <a href="home.html" class="flex items-center justify-center w-full h-12 rounded-xl bg-primary text-white font-bold text-sm shadow-lg shadow-primary/30 active:scale-[0.98] transition-transform">
+                          العودة للصفحة الرئيسية
+                      </a>
+                  </div>
+              </div>
+        </form>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 z-40 px-4 pb-5 pt-2">
+        <div class="glass rounded-2xl shadow-xl shadow-black/5 dark:shadow-black/20 flex items-center justify-around h-16 mx-auto max-w-lg">
+            <a href="home.html" class="flex flex-col items-center gap-1 p-2 text-gray-500 dark:text-gray-400 hover:text-primary transition-colors touch-target">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span class="text-[10px] font-bold">الرئيسية</span>
+            </a>
+            <div class="flex flex-col items-center gap-1 p-2 text-primary transition-colors touch-target">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                <span class="text-[10px] font-bold">طلب عمل</span>
+            </div>
+            <a href="study methods.html" class="flex flex-col items-center gap-1 p-2 text-gray-500 dark:text-gray-400 hover:text-primary transition-colors touch-target">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                <span class="text-[10px] font-bold">طرق الدراسة</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container flex flex-col gap-2"></div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+        import { getAnalytics, logEvent } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC8xPB4clB_vCsjyFmIXj_GfWwkn8kkIK0",
+            authDomain: "vocalearn-7acac.firebaseapp.com",
+            projectId: "vocalearn-7acac",
+            storageBucket: "vocalearn-7acac.firebasestorage.app",
+            messagingSenderId: "396566104390",
+            appId: "1:396566104390:web:faddd5f7d7eef64f407d47",
+            measurementId: "G-X4F0KL0KSF"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const analytics = getAnalytics(app);
+
+        // Theme
+        const initTheme = () => {
+            const saved = localStorage.getItem('voclearn_theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (saved === 'dark' || (!saved && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+        };
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('voclearn_theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('voclearn_theme', 'dark');
+            }
+        }
+
+        // Toast
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const colors = { success: 'bg-success', danger: 'bg-danger', warning: 'bg-warning', info: 'bg-primary' };
+            const icons = {
+                success: '<svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+                danger: '<svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>',
+                warning: '<svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>',
+                info: '<svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>'
+            };
+            toast.className = `toast ${colors[type]} text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 text-sm font-medium`;
+            toast.innerHTML = `${icons[type]}<span>${message}</span>`;
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.add('show'));
+            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 3500);
+        }
+
+        // Image Upload
+        let uploadedImageUrl = '';
+
+        async function handleImageUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const preview = document.getElementById('profile-preview');
+            const placeholder = document.getElementById('upload-placeholder');
+            
+            // حفظ المحتوى الأصلي لإعادته في حالة الخطأ
+            const originalPlaceholderHTML = placeholder.innerHTML;
+
+            // إظهار اللودينغ
+            preview.classList.add('hidden');
+            placeholder.classList.remove('hidden');
+            placeholder.innerHTML = `
+                <span class="animate-spin inline-block w-8 h-8 border-4 border-primary border-t-transparent rounded-full mb-2"></span>
+                <p class="text-xs font-bold text-primary">جاري تحميل الصورة...</p>
+                <p class="text-[10px] text-gray-400 mt-0.5">الرجاء الانتظار</p>
+            `;
+
+            try {
+                const url = 'https://api.cloudinary.com/v1_1/djlv3udss/image/upload';
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', 'Vocalearn');
+
+                const res = await fetch(url, { method: 'POST', body: formData });
+                const data = await res.json();
+
+                if (data.secure_url) {
+                    uploadedImageUrl = data.secure_url;
+                    preview.src = data.secure_url;
+                    
+                    // إخفاء اللودينغ وإظهار الصورة
+                    placeholder.classList.add('hidden');
+                    preview.classList.remove('hidden');
+                    
+                    // إعادة المحتوى الأصلي في الخلفية تحسباً لرفع صورة أخرى
+                    placeholder.innerHTML = originalPlaceholderHTML;
+                    
+                    showToast('تم تحميل الصورة بنجاح', 'success');
+                } else {
+                    throw new Error(data.error?.message || 'Upload failed');
+                }
+            } catch (err) {
+                placeholder.innerHTML = originalPlaceholderHTML;
+                showToast('فشل رفع الصورة: ' + err.message, 'danger');
+                uploadedImageUrl = '';
+            }
+        }
+
+
+        // Drag & Drop
+        const uploadZone = document.querySelector('.upload-zone');
+        if (uploadZone) {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadZone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }, false);
+            });
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadZone.addEventListener(eventName, () => uploadZone.classList.add('dragover'), false);
+            });
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadZone.addEventListener(eventName, () => uploadZone.classList.remove('dragover'), false);
+            });
+            uploadZone.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                if (files.length) {
+                    const input = document.getElementById('profile-input');
+                    input.files = files;
+                    handleImageUpload(input);
+                }
+            }, false);
+        }
+
+            // ==========================================
+        // إعدادات ودالة إرسال التيلجرام للمدير
+        // ==========================================
+        const TELEGRAM_BOT_TOKEN = '7844729808:AAHo63qnseNesZNtprvMm3d1R51yyrqAEvI';
+        const TELEGRAM_CHAT_ID = '7773047224';
+
+        async function sendAdminNotification(data) {
+            const message = `
+🆕 <b>طلب توظيف جديد!</b>
+
+👤 <b>الاسم:</b> ${data.fullName}
+📚 <b>التخصص:</b> ${data.specialization}
+📱 <b>الهاتف:</b> ${data.phone}
+💰 <b>الدورة المقترحة:</b> ${data.courseToTeach} (${data.coursePrice} دج)
+⏳ <b>المدة:</b> ${data.sessionDuration}
+⭐️ <b>الخبرة:</b> ${data.experience}
+
+<i>تواصل معه عبر واتساب: wa.me/${data.phone.replace(/^0/, '213')}</i>
+            `;
+            try {
+                await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message, parse_mode: 'HTML' })
+                });
+            } catch (err) { console.error('Telegram Error:', err); }
+        }
+
+
+            // جلب الدورات للقائمة المنسدلة
+        onSnapshot(query(collection(db, 'courses'), orderBy('createdAt', 'desc')), (snap) => {
+            const select = document.getElementById('course_select');
+            let options = '<option value="">اختر الدورة...</option>';
+            snap.docs.forEach(doc => {
+                options += `<option value="${doc.id}">${doc.data().title}</option>`;
+            });
+            options += '<option value="other" class="font-bold text-primary">➕ أخرى (إضافة دورة جديدة)</option>';
+            select.innerHTML = options;
+        });
+
+        function handleCourseSelection(value) {
+            const customInput = document.getElementById('custom_course_input');
+            if (value === 'other') {
+                customInput.classList.remove('hidden');
+                customInput.required = true;
+            } else {
+                customInput.classList.add('hidden');
+                customInput.required = false;
+            }
+        }
+            function handleDurationSelection(value) {
+            const customInput = document.getElementById('custom_duration_input');
+            if (value === 'custom') {
+                customInput.classList.remove('hidden');
+                customInput.required = true;
+            } else {
+                customInput.classList.add('hidden');
+                customInput.required = false;
+                customInput.value = '';
+            }
+        }
+
+
+        // Form Submit
+        async function submitApplication(e) {
+            e.preventDefault();
+            const form = e.target;
+            const btn = document.getElementById('submit-btn');
+            const originalText = btn.innerHTML;
+
+            const courseSelect = document.getElementById('course_select');
+            const isNewCourse = courseSelect.value === 'other';
+            const courseTitle = isNewCourse ? document.getElementById('custom_course_input').value : courseSelect.options[courseSelect.selectedIndex].text;
+            const courseId = isNewCourse ? 'other' : courseSelect.value;
+
+            const email = form.email.value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showToast('يرجى إدخال بريد إلكتروني صحيح', 'warning');
+                form.email.focus();
+                return;
+            }
+
+            const phone = form.phone.value;
+            if (phone.length < 8) {
+                showToast('يرجى إدخال رقم هاتف صحيح', 'warning');
+                form.phone.focus();
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="animate-spin inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full"></span> جاري الإرسال...';
+
+            try {
+                const durationSelect = document.getElementById('duration_select');
+                const finalDuration = durationSelect.value === 'custom' ? document.getElementById('custom_duration_input').value : durationSelect.value;
+
+                const imageUrl = uploadedImageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(form.first_name.value + ' ' + form.last_name.value)}&background=6366F1&color=fff&size=256`;
+
+                const applicationData = {
+                    first_name: form.first_name.value,
+                    last_name: form.last_name.value,
+                    fullName: form.first_name.value + ' ' + form.last_name.value,
+                    email: email,
+                    phone: phone,
+                    specialization: form.specialization.value,
+                    experience: form.experience.value,
+                    teachingMethod: form.teaching_method.value,
+                    additionalNotes: form.additional_notes ? form.additional_notes.value : '',
+                    courseToTeach: courseTitle,
+                    courseId: courseId,
+                    coursePrice: form.course_price.value,
+                    sessionsCount: form.sessions_count.value,
+                    sessionDuration: finalDuration,
+                    profileImage: imageUrl,
+                    status: 'pending',
+                    createdAt: serverTimestamp()
+                };
+
+                await addDoc(collection(db, 'job_requests'), applicationData);
+                await sendAdminNotification(applicationData);
+
+                logEvent(analytics, 'job_application_submitted');
+
+                // إظهار النافذة المنبثقة بدلاً من رسالة التوست
+                const modal = document.getElementById('success-modal');
+                const modalContent = document.getElementById('success-modal-content');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                
+                // استخدام requestAnimationFrame لضمان عمل الأنيميشن
+                requestAnimationFrame(() => {
+                    modal.classList.remove('opacity-0');
+                    modalContent.classList.remove('scale-95');
+                    modalContent.classList.add('scale-100');
+                });
+
+                form.reset();
+                uploadedImageUrl = '';
+                document.getElementById('profile-preview').classList.add('hidden');
+                document.getElementById('upload-placeholder').classList.remove('hidden');
+
+            } catch (err) {
+                showToast('حدث خطأ، حاول مرة أخرى: ' + err.message, 'danger');
+                console.error(err);
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+
+
+
+        // Init
+        initTheme();
+
+        // Expose to window
+        window.toggleTheme = toggleTheme;
+        window.showToast = showToast;
+        window.handleImageUpload = handleImageUpload;
+        window.submitApplication = submitApplication;
+        window.handleCourseSelection = handleCourseSelection;
+        window.handleDurationSelection = handleDurationSelection;
+    </script>
+</body>
+</html>
