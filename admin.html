@@ -139,6 +139,11 @@
 <base target="_blank">
 <base target="_blank">
 <base target="_blank">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="VocaLearn Admin">
+<link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=V&background=6366F1&color=fff&size=192">
 </head>
 <body class="bg-gray-50 dark:bg-dark text-gray-900 dark:text-white transition-colors duration-300 antialiased min-h-screen">
 
@@ -456,6 +461,15 @@
     <div id="toast-container" class="toast-container flex flex-col gap-2"></div>
 
     <!-- Firebase & App Logic -->
+    <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('✅ Service Worker registered:', reg.scope))
+        .catch(err => console.error('❌ Registration failed:', err));
+    });
+  }
+    </script>
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
         import { getFirestore, collection, addDoc, updateDoc, deleteDoc, onSnapshot, doc, serverTimestamp, query, orderBy, where, getDocs } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
