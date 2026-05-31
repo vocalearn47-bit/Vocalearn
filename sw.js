@@ -1,12 +1,13 @@
 const CACHE_NAME = 'vocalearn-admin-v1';
 
 const ASSETS = [
-  'admin.html',
-  'manifest.json'
+  '/Vocalearn/admin',
+  '/Vocalearn/manifest.json'
 ];
 
-// حدث التثبيت: فتح الكاش وتخزين الملفات
+// حدث التثبيت
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS);
@@ -14,7 +15,12 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// حدث الاعتراض: Cache First Strategy
+// حدث التفعيل
+self.addEventListener('activate', (event) => {
+  event.waitUntil(clients.claim());
+});
+
+// Cache First Strategy
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
