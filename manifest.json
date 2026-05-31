@@ -1,7 +1,8 @@
 {
   "name": "VocaLearn Admin",
   "short_name": "VocaLearn",
-  "start_url": "admin.html",
+  "start_url": "/Vocalearn/admin",
+  "scope": "/Vocalearn/",
   "display": "standalone",
   "background_color": "#111827",
   "theme_color": "#6366F1",
