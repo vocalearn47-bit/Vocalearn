@@ -1203,23 +1203,22 @@ async function sendTelegram(username, message) {
 
                 await updateDoc(doc(db, 'job_requests', id), {status: 'approved', teacherId: teacherRef.id, updatedAt: serverTimestamp()});
                 
-                // ⭐ إرسال رسالة ترحيبية عبر EmailJS (فقط عند قبول طلب التوظيف من الموقع)
-                // ⭐ إرسال رسالة ترحيبية عبر EmailJS (فقط عند قبول طلب التوظيف من الموقع)
+                // ⭐ إرسال رسالة ترحيبية عبر n8n Webhook
                 if (req.email) {
                     try {
-                        await window.emailjs.send("service_2j7ilhn", "template_4d9kkze", {
-                            to_name: req.fullName,
-                            to_email: req.email,
+                        await fetch('http://localhost:5678/webhook-test/9f9a76ca-c48c-4e0c-af2d-006c8e6f4ec9', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                email: req.email,
+                                name: req.fullName,
+                            })
                         });
                         showToast('📧 تم إرسال رسالة الترحيب عبر البريد الإلكتروني', 'success');
-                                    } catch (emailErr) {
-                    console.error('EmailJS error:', emailErr);
-                    // هذه الأسطر ستكشف لك سبب الرفض الحقيقي من EmailJS
-                      const errorMsg = emailErr.text || emailErr.message || JSON.stringify(emailErr);
-                      alert("سبب رفض EmailJS هو:\n" + errorMsg);
-                      showToast('⚠️ فشل الإرسال: تحقق من Alert', 'warning');
-                  }
-
+                    } catch (emailErr) {
+                        console.error('n8n webhook error:', emailErr);
+                        showToast('⚠️ فشل إرسال الإيميل', 'warning');
+                    }
                 }
 
 
@@ -1978,4 +1977,4 @@ async function updateTeacher(e, id) {
         }
     </script>
 </body>
-</html>
+            </html>
