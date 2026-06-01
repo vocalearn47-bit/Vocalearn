@@ -1311,7 +1311,7 @@ async function sendTelegram(username, message) {
             const email = prompt('أدخل إيميل الاختبار:');
             if (!email) return;
             try {
-                await fetch('https://clump-private-celestial.ngrok-free.dev/webhook-test/9f9a76ca-c48c-4e0c-af2d-006c8e6f4ec9', {
+                await fetch('https://clump-private-celestial.ngrok-free.dev/webhook/9f9a76ca-c48c-4e0c-af2d-006c8e6f4ec9', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: email, name: 'اختبار' })
